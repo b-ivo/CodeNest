@@ -29,7 +29,7 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  if (loading) return <p className="flex items-center justify-center"> <Loader /> </p>;
+  if (loading) return <div className="flex items-center justify-center"> <Loader /> </div>;
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 flex flex-row ">

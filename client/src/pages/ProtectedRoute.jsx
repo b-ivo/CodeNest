@@ -25,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
     checkAuth();
   }, []);
 
-  if (loading) return <p className="flex justify-center items-center"> <Loader /> </p>;
+  if (loading) return <div className="flex justify-center items-center"> <Loader /> </div>;
 
   if (!authenticated) return <Navigate to="/login" replace />;
 
