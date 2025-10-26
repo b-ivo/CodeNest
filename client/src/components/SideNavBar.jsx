@@ -13,7 +13,7 @@ const SideNavBar = () => {
 const navigate = useNavigate();
 
   const mainLinks = [
-    { to: "/dashboard", label: "Dashboard", icon: <FaHome /> },
+    { to: "/", label: "Dashboard", icon: <FaHome /> },
     { to: "/courses", label: "My Courses", icon: <FaBook /> },
     { to: "/assignments", label: "Assignments", icon: <FaClipboardCheck /> },
     { to: "/submit", label: "E-submit", icon: <FaUpload /> },

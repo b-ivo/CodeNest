@@ -27,11 +27,11 @@ export default function Register() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || "Registration failed"); 
+        setError(data.message || "Registration failed");
       } else {
-        navigate("/"); 
+        navigate("/");
       }
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (err) {
       setError("Network error. Please try again.");
     } finally {
@@ -56,7 +56,7 @@ export default function Register() {
         <div className="flex flex-col justify-center items-center bg-white w-1/2 rounded-r-3xl border-3 border-white">
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col items-center w-full"
+            className="flex flex-col items-center justify-center"
           >
             <h1 className="text-blue-950 font-medium text-4xl mb-4">Sign Up</h1>
 

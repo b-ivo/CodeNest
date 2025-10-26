@@ -46,7 +46,7 @@ export default function Login() {
         <div className="w-1/2 bg-[#161550] border-3 border-white flex items-center justify-center rounded-l-3xl">
           <div className="flex flex-col">
             <h1 className="text-white font-extrabold text-5xl mx-12 my-4">
-              Welcome to codenest
+              Welcome to CodeNest
             </h1>
             <p className="text-white font-medium text-3xl mx-12">
               To keep connected with us login with your personal info

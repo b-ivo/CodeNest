@@ -1,8 +1,8 @@
 import express from "express";
-import { authenticate } from "../middleware/authenticate.js";
+import { authenticate, authorizeRoles } from "../middleware/authenticate.js";
 const router = express.Router();
 
-router.get("/dashboard", authenticate, (req, res) => {
+router.get("/dashboard", authenticate, authorizeRoles("student"), (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: "Unauthorized" });
   }
