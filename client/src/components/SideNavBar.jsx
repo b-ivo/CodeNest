@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaBook,
@@ -9,6 +10,8 @@ import {
 } from "react-icons/fa";
 
 const SideNavBar = () => {
+const navigate = useNavigate();
+
   const mainLinks = [
     { to: "/dashboard", label: "Dashboard", icon: <FaHome /> },
     { to: "/courses", label: "My Courses", icon: <FaBook /> },
@@ -24,7 +27,7 @@ const SideNavBar = () => {
       });
 
       if (res.ok) {
-        window.location.href = "/login";
+        navigate("/login")
       } else {
         console.error("Failed to log out");
       }

@@ -29,7 +29,7 @@ export default function Login() {
       if (!res.ok) {
         setError(data.message || "Registration failed");
       } else {
-        navigate("/dashboard");
+        navigate("/");
       }
     } catch (err) {
       setError("Failed to login. Please try again.");
