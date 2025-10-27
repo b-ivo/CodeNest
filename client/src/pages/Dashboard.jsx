@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import SideNavBar from "../components/SideNavBar";
+import Input from "../components/Input";
+import UserInfo from "../components/UserInfo";
+import NotificationBell from "../components/Notification";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -29,36 +32,28 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  if (loading) return <div className="flex items-center justify-center"> <Loader /> </div>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center">
+        {" "}
+        <Loader />{" "}
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 flex flex-row ">
       {/* Nav bar */}
       <div className="">
-        <SideNavBar /> 
+        <SideNavBar />
       </div>
-      {/* Dasboard */}
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6 h-[400px]">
-        <h1 className="text-2xl font-bold mb-4">{message}</h1>
-
-        {user && (
-          <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-            <h2 className="text-xl font-semibold mb-2">User Info</h2>
-            <p className="text-gray-700">
-              <span className="font-medium">Name:</span> {user.name}
-            </p>
-            <p className="text-gray-700">
-              <span className="font-medium">Email:</span> {user.email}
-            </p>
-          </div>
-        )}
-
-        <div className="mt-6 p-6 bg-blue-50 rounded-lg shadow-sm">
-          <h2 className="text-lg font-semibold mb-2">Dashboard</h2>
-          <p className="text-gray-700">
-            Welcome to your dashboard. You can put charts, stats, or recent
-            activity here.
-          </p>
+      {/* The upper bar that contains search bar notification menu and the user information */}
+      <div className="flex flex-row h-12 justify-between w-full">
+        <div className="w-1/3 ml-5">
+          <Input placeholder="search courses , assignments ..." />
+        </div>
+        <div className="flex gap-5">
+          <NotificationBell />
+          <UserInfo user={user} />
         </div>
       </div>
     </div>
