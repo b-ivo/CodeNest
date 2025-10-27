@@ -2,6 +2,7 @@ import { useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
+import { InlineLoader } from "../components/inLineLoader";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -40,7 +41,7 @@ export default function Register() {
   };
 
   return (
-    <div className="w-dvw h-screen bg-blue-200 flex items-center justify-center">
+    <div className="w-dvw h-screen bg-cover bg-center flex items-center justify-center" style={{backgroundImage: "url('../public/bg.jpg')"}}>
       <div className="h-4/5 w-4/5 flex">
         {/* Left side */}
         <div className="w-1/2 bg-[#161550] border-3 border-white flex items-center justify-center rounded-l-3xl">
@@ -56,7 +57,7 @@ export default function Register() {
         <div className="flex flex-col justify-center items-center bg-white w-1/2 rounded-r-3xl border-3 border-white">
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col items-center justify-center"
+            className="flex flex-col items-center justify-center w-full"
           >
             <h1 className="text-blue-950 font-medium text-4xl mb-4">Sign Up</h1>
 
@@ -84,7 +85,7 @@ export default function Register() {
             )}
 
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating account..." : "Signup"}
+              {loading ? <InlineLoader /> : "Signup"}
             </Button>
 
             <p className="text-blue-950 mt-4">

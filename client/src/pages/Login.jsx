@@ -40,7 +40,10 @@ export default function Login() {
   };
 
   return (
-    <div className="w-dvw h-screen bg-blue-200 flex items-center justify-center">
+    <div
+      className="w-dvw h-screen bg-cover bg-center flex items-center justify-center"
+      style={{ backgroundImage: "url('../public/bg.jpg'" }}
+    >
       <div className="h-4/5 w-4/5 flex">
         {/* Left side */}
         <div className="w-1/2 bg-[#161550] border-3 border-white flex items-center justify-center rounded-l-3xl">
@@ -66,6 +69,7 @@ export default function Login() {
               placeholder="Email"
               type="text"
               value={email}
+              name="email"
               onChange={(e) => setEmail(e.target.value)}
             />
 
@@ -73,6 +77,7 @@ export default function Login() {
               placeholder="Password"
               type="password"
               value={password}
+              name="password "
               onChange={(e) => setPassword(e.target.value)}
             />
 
@@ -104,7 +109,7 @@ export default function Login() {
             </div>
 
             <Button type="submit" disabled={loading}>
-              {loading ? "Logging..." : "Login"}
+              {loading ? <InlineLoader /> : "Login"}
             </Button>
 
             <p className="text-blue-950 mt-4">

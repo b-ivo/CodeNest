@@ -14,7 +14,7 @@ export default function Input({
       value={value}
       onChange={onChange}
       autoComplete={autoComplete}
-      className="border rounded-full p-3 focus:outline-none focus:ring-blue-500 mt-2 mb-5 w-3/4"
+      className="border rounded-full p-3 focus:outline-none focus:border-blue-500 mt-2 mb-5 w-3/4"
     />
   );
 }
