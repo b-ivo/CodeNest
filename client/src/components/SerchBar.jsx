@@ -3,7 +3,7 @@ import Input from "./Input";
 const SearcBar = () => {
   return(
     <div>
-      <Input placeholder="search courses , assignments ..." name="Search bar"  />
+      <Input placeholder="search courses , assignments ..." name="Search"  />
     </div>
   )
 }

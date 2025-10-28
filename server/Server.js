@@ -7,6 +7,7 @@ import cors from "cors";
 import dashboardRoute from "./auth/dashboardRoute.js";
 import cookieParser from "cookie-parser";
 import Logout from "./auth/Logout.js";
+import addcourse from "./routes/courseroute.js"
 dotenv.config();
 
 const app = express();
@@ -24,6 +25,7 @@ app.use("/api/auth", signupRoute);
 app.use("/api/auth", loginRoute);
 app.use("/api", dashboardRoute);
 app.use("/api/auth", Logout);
+app.use("/api", addcourse)
 
 connectDB();
 

@@ -42,7 +42,7 @@ export default function Login() {
   return (
     <div
       className="w-dvw h-screen bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: "url('../public/bg.jpg'" }}
+      style={{ backgroundImage: "url('/bg.jpg'" }}
     >
       <div className="h-4/5 w-4/5 flex">
         {/* Left side */}

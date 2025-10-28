@@ -3,15 +3,14 @@ import { FaBell } from "react-icons/fa";
 
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState([
-    "New message from John",
-    "Server restarted",
-    "Assignment graded",
-    "Bivo is a genius"
+    "Qiaboy is amaized",
+    "Nothing is not working",
+    "i am playing with your brain"
   ]);
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative pt-5">
       <button
         onClick={() => setOpen(!open)}
         className="relative p-2 text-black cursor-pointer hover:text-gray-800"

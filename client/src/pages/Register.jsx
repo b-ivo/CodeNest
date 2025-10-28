@@ -32,16 +32,19 @@ export default function Register() {
       } else {
         navigate("/");
       }
-      // eslint-disable-next-line no-unused-vars
+      
     } catch (err) {
-      setError("Network error. Please try again.");
+      setError("Network error. Please try again.", err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-dvw h-screen bg-cover bg-center flex items-center justify-center" style={{backgroundImage: "url('../public/bg.jpg')"}}>
+    <div
+      className="w-dvw h-screen bg-cover bg-center flex items-center justify-center"
+      style={{ backgroundImage: "url('../public/bg.jpg')" }}
+    >
       <div className="h-4/5 w-4/5 flex">
         {/* Left side */}
         <div className="w-1/2 bg-[#161550] border-3 border-white flex items-center justify-center rounded-l-3xl">
