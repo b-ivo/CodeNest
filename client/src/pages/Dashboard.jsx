@@ -81,7 +81,7 @@ export default function Dashboard() {
     );
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8 flex flex-row ">
+    <div className="min-h-screen bg-gray-100 p-8 flex flex-row">
       {/* Nav bar */}
       <div>
         <SideNavBar />

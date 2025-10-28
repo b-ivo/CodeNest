@@ -24,8 +24,8 @@ app.use(cookieParser());
 app.use("/api/auth", signupRoute);
 app.use("/api/auth", loginRoute);
 app.use("/api", dashboardRoute);
-app.use("/api/auth", Logout);
 app.use("/api", addcourse)
+app.use("/api/auth", Logout);
 
 connectDB();
 
