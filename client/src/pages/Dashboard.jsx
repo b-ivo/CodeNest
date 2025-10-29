@@ -8,6 +8,8 @@ import NotificationBell from "../components/Notification";
 import Card from "../components/card";
 import AddCourseCard from "../components/AddCourseCard";
 import AddCourse from "../components/AddCourse";
+import GradeBookPage from "../components/GradeBookCard";
+import Button from "../components/Button";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -114,8 +116,24 @@ export default function Dashboard() {
             />
           )}
         </div>
+        {/* Grade book section */}
         <div className="text-2xl font-bold ml-6 mt-6">
           <h1>Grade book</h1>
+          <div className="mt-5">
+            <GradeBookPage />
+          </div>
+        </div>
+        {/* Assignment page  */}
+        <div>
+          <div className="flex justify-between ml-5 mt-6 ">
+            <h1 className="font-bold text-2xl">Assignment</h1>
+            <div className="w-33">
+              <Button onClick={() => navigate("/assignments")}>See all</Button>
+            </div>
+          </div>
+          <div>
+            
+          </div>
         </div>
       </div>
     </div>

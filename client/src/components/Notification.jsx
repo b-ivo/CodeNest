@@ -3,9 +3,7 @@ import { FaBell } from "react-icons/fa";
 
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState([
-    "Qiaboy is amaized",
-    "Nothing is not working",
-    "i am playing with your brain"
+    
   ]);
   const [open, setOpen] = useState(false);
 

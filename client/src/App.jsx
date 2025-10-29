@@ -5,6 +5,8 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 import Profile from "./pages/Profile";
+import GradeBook from "./pages/GradeBook";
+import MyCourses from "./pages/MyCourse";
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={ <Profile /> } />
+        <Route path="/gradebook" element={ <GradeBook /> } />
+        <Route path="/courses" element={ <MyCourses /> } />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>

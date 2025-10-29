@@ -55,9 +55,9 @@ const AddCourse = ({ onClose, onSubmit }) => {
           onChange={(e) => setCategory(e.target.value)}
         />
 
-        <label>Select Class</label>
+        <label>Add level</label>
         <Input
-          placeholder="Select class"
+          placeholder="Please put the level 3,4,5"
           value={classLevel}
           onChange={(e) => setClassLevel(e.target.value)}
         />

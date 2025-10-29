@@ -7,16 +7,18 @@ import {
   FaUpload,
   FaUser,
   FaSignOutAlt,
+  FaBookReader,
 } from "react-icons/fa";
 
 const SideNavBar = () => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const mainLinks = [
     { to: "/", label: "Dashboard", icon: <FaHome /> },
     { to: "/courses", label: "My Courses", icon: <FaBook /> },
     { to: "/assignments", label: "Assignments", icon: <FaClipboardCheck /> },
     { to: "/submit", label: "E-submit", icon: <FaUpload /> },
+    { to: "/gradebook", label: "My grades", icon: <FaBookReader /> },
   ];
 
   const handleLogout = async () => {
@@ -27,7 +29,7 @@ const navigate = useNavigate();
       });
 
       if (res.ok) {
-        navigate("/login")
+        navigate("/login");
       } else {
         console.error("Failed to log out");
       }
@@ -37,7 +39,7 @@ const navigate = useNavigate();
   };
 
   return (
-    <div className="bg-[#161550] h-full w-[220px] rounded-lg flex flex-col justify-between py-8">
+    <div className="bg-gradient-to-b from-[#161550] to-blue-600 h-full w-[220px] rounded-lg flex flex-col justify-between py-8">
       <div className="flex items-center justify-center text-white font-extrabold text-2xl">
         CodeNest
       </div>
@@ -48,7 +50,7 @@ const navigate = useNavigate();
           <Link
             key={label}
             to={to}
-            className="flex items-center gap-3 hover:bg-blue-300 py-2 px-3 rounded-xl transition"
+            className="flex items-center gap-3 w-full py-2 px-3 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-500 hover:after:w-full"
           >
             {icon}
             <span>{label}</span>
@@ -62,7 +64,7 @@ const navigate = useNavigate();
       <div className="flex flex-col text-white font-semibold text-lg gap-3 px-6">
         <Link
           to="/profile"
-          className="flex items-center gap-3 hover:bg-blue-300 py-2 px-3 rounded-xl transition"
+          className="flex items-center gap-3 w-full py-2 px-3 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-500 hover:after:w-full"
         >
           <FaUser />
           <span>Profile</span>
@@ -70,7 +72,7 @@ const navigate = useNavigate();
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 hover:bg-red-500 py-2 px-3 rounded-xl transition"
+          className="flex items-center gap-3 w-full py-2 px-3 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-red-500 after:transition-all after:duration-500 hover:after:w-full cursor-pointer"
         >
           <FaSignOutAlt />
           <span>Logout</span>
