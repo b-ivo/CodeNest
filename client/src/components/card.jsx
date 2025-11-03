@@ -17,7 +17,7 @@ const Card = ({ course }) => {
       role="button"
       aria-label={`Open course ${course.courseName}`}
     >
-      {/* small icon */}
+      {/* Small icon */}
       <div className="absolute top-4 left-4 text-white/80">
         {course.icon || <FaBook size={22} />}
       </div>

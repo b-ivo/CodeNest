@@ -8,32 +8,13 @@ const AddCourse = ({ onClose, onSubmit }) => {
   const [classLevel, setClassLevel] = useState("");
   const [periods, setPeriods] = useState("");
 
-  const addCourse = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/api/addcourse", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ courseName, category, classLevel, periods }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        onSubmit(data);
-        onClose();
-      } else {
-        alert(data.message || "Error adding course");
-      }
-    } catch (err) {
-      console.error("Error adding course:", err);
-      alert("Something went wrong. Check console.");
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    addCourse();
+    if (!courseName || !category || !classLevel || !periods) {
+      alert("Please fill in all fields");
+      return;
+    }
+    onSubmit({ courseName, category, classLevel, periods });
   };
 
   return (
