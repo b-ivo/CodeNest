@@ -8,7 +8,6 @@ import Card from "../components/Card";
 import AddCourseCard from "../components/AddCourseCard";
 import AddCourse from "../components/AddCourse";
 import GradeBookPage from "../components/GradeBookCard";
-import Button from "../components/Button";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -18,6 +17,25 @@ export default function Dashboard() {
   const [refreshCourses, setRefreshCourses] = useState(false);
   const navigate = useNavigate();
 
+  // Fetch user
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/dashboard", {
+          credentials: "include",
+        });
+        if (!res.ok) throw new Error("Unauthorized");
+        const data = await res.json();
+        setUser(data.user);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, []);
+  
   // Fetch courses
   const fetchCourses = async () => {
     try {
@@ -54,24 +72,6 @@ export default function Dashboard() {
     }
   };
 
-  // Fetch user
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/dashboard", {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Unauthorized");
-        const data = await res.json();
-        setUser(data.user);
-      } catch {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUser();
-  }, []);
 
   if (loading) return <Loader />;
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import SideNavBar from "../components/SideNavBar";
 import Input from "../components/Input";
 import NotificationBell from "../components/Notification";
 import { useNavigate } from "react-router-dom";
@@ -31,71 +30,88 @@ const Profile = () => {
       }
     };
     fetchData();
-  });
+  }, [baseUrl, navigate]);
 
   if (loading)
     return (
-      <div className="flex items-center justify-center">
-        {" "}
-        <Loader />{" "}
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <Loader />
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8 flex flex-row">
-      <div>
-        <SideNavBar />
+    <div className="min-h-screen bg-gray-50 px-10 py-8 flex flex-col gap-10 overflow-hidden">
+      {/* Top bar */}
+      <div className="flex items-center justify-between">
+        <div className="w-1/3">
+          <Input placeholder="Search courses, assignments..." />
+        </div>
+        <div className="flex items-center gap-6">
+          <NotificationBell />
+          <UserInfo user={user} />
+        </div>
       </div>
 
-      <div className="flex flex-col w-full justify-between h-12">
-        <div className="flex justify-between">
-          <div className="ml-5 w-1/3">
-            <Input placeholder="search courses , assignments ..." />
+      {/* Header */}
+      <div>
+        <h1 className="text-4xl font-bold text-gray-800">Profile</h1>
+        <p className="text-gray-500 mt-2">Find your relevant information</p>
+      </div>
+
+      {/* Profile content */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Left Card */}
+        <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col items-center text-center border border-gray-200">
+          <div className="w-28 h-28 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 text-4xl font-semibold mb-4">
+            {user?.name?.charAt(0).toUpperCase()}
           </div>
-          <div className="flex items-center justify-center gap-7">
-            <NotificationBell />
-            <UserInfo user={user} />
-          </div>
+          <p className="text-xl font-semibold text-gray-800">{user?.name}</p>
+          <span className="text-sm text-gray-500">{user?.email}</span>
         </div>
 
-        <div className="ml-5">
-          <h1 className="text-3xl font-bold ">Profile</h1>
-          <p className="mt-5">Find your relevant information</p>
-        </div>
-        {/* User info card */}
-        <div className="bg-[#D9D9D942] w-[200px] flex justify-center items-center flex-col mt-5 ml-5 p-5 rounded-xl">
-          {user ? (
-            <>
-              <div className="w-30 h-30 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 text-4xl font-semibold ">
-                {user.name?.charAt(0).toUpperCase()}
-              </div>
-              <p className="font-medium text-l">{user.name}</p>
-              <span className="text-s text-gray-500">{user.email}</span>
-            </>
-          ) : (
-            <Loader />
-          )}
-        </div>
-
-        {/* Detailed user informaition card */}
-        <div className="bg-[#D9D9D942] w-[500px] flex flex-col mt-5 ml-5 p-5 roudend-xl">
-          <div className="mb-10">
-            <p className="text-3xl font-medium border-b-1 ">Personal Details</p>
-          </div>
-          <div className="flex gap-16">
+        {/* Right Details Card */}
+        <div className="bg-white shadow-md rounded-2xl p-6 md:col-span-2 border border-gray-200">
+          <h2 className="text-2xl font-semibold text-gray-800 border-b pb-3 mb-6">
+            Personal Details
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex flex-col gap-5">
               <div>
-                <p className="text-xl font-serif">Full Name</p>
-                <span className="text-xl font-bold">{user.name}</span>
+                <p className="text-gray-500 text-sm uppercase tracking-wide">
+                  Full Name
+                </p>
+                <span className="text-lg font-medium text-gray-800">
+                  {user?.name}
+                </span>
               </div>
               <div>
-                <p className="text-xl font-serif">Role</p>
-                <span className="text-xl font-bold">{user.role}</span>
+                <p className="text-gray-500 text-sm uppercase tracking-wide">
+                  Role
+                </p>
+                <span className="text-lg font-medium text-gray-800">
+                  {user?.role}
+                </span>
               </div>
             </div>
-            <div>
-              <p className="text-xl font-serif">Email</p>
-              <span className="text-xl font-bold">{user.email}</span>
+            <div className="flex flex-col gap-5">
+              <div>
+                <p className="text-gray-500 text-sm uppercase tracking-wide">
+                  Email
+                </p>
+                <span className="text-lg font-medium text-gray-800">
+                  {user?.email}
+                </span>
+              </div>
+              <div>
+                <p className="text-gray-500 text-sm uppercase tracking-wide">
+                  Joined
+                </p>
+                <span className="text-lg font-medium text-gray-800">
+                  {user?.createdAt
+                    ? new Date(user.createdAt).toLocaleDateString()
+                    : "N/A"}
+                </span>
+              </div>
             </div>
           </div>
         </div>
