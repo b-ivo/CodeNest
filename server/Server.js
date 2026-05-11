@@ -28,7 +28,16 @@ app.use("/api", dashboardRoute);
 app.use("/api", addcourse)
 app.use("/api/auth", Logout);
 
-connectDB();
+// Middleware to ensure DB connection
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("DB connection error in middleware:", err.message);
+    res.status(500).json({ message: "Database connection failed" });
+  }
+});
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () => {
