@@ -1,53 +1,28 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import Input from "../components/Input";
 import UserInfo from "../components/UserInfo";
 import NotificationBell from "../components/Notification";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { useState } from "react";
 import Card from "../components/Card";
 import AddCourse from "../components/AddCourse";
 import AddCourseCard from "../components/AddCourseCard";
+import Loader from "../components/Loader";
 
 const MyCourses = () => {
-  const [user, setUser] = useState();
-  const [loading, setLoading] = useState();
+  const { user, loading } = useAuth();
   const [courses, setCourses] = useState([]);
   const [showAddcourse, setShowAddCourse] = useState(false);
-
+  const [refreshCourses, setRefreshCourses] = useState(false);
   const navigate = useNavigate();
-  const baseUrl = import.meta.env.VITE_APIS;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`${baseUrl}/api/dashboard`, {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Unauthorized");
-
-        const data = await res.json();
-        setUser(data.user);
-      } catch {
-        alert("You are not authorized to view this page.");
-        setUser(null);
-        navigate("/login");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  });
-
-  const fetchCourse = async () => {
+  const fetchCourses = async () => {
     try {
-      const res = await fetch(`${baseUrl}/api/allcourse`, {
+      const res = await fetch("/api/allcourse", {
         method: "GET",
         credentials: "include",
       });
-
       const data = await res.json();
-      console.log(data);
-
       if (res.ok) setCourses(data);
     } catch (err) {
       console.error(err);
@@ -55,12 +30,12 @@ const MyCourses = () => {
   };
 
   useEffect(() => {
-    fetchCourse();
-  });
+    fetchCourses();
+  }, [refreshCourses]);
 
   const handleAddCourseSubmit = async (courseData) => {
     try {
-      const res = await fetch(`${baseUrl}/api/addcourse`, {
+      const res = await fetch("/api/addcourse", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(courseData),
@@ -69,47 +44,50 @@ const MyCourses = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
       setShowAddCourse(false);
+      setRefreshCourses((prev) => !prev);
     } catch (err) {
-      console.log(err.message);
+      console.error(err);
     }
   };
 
   if (loading)
     return (
-      <div className="flex items-center justify-center">
-        {" "}
-        <Loader />{" "}
+      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+        <Loader />
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8 flex flex-col">
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Upper bar */}
-      <div className="flex flex-col w-full justify-between h-12">
-        <div></div>
-        <div className="flex justify-between">
-          <div className="ml-5 w-1/3">
-            <Input placeholder="search courses , assignments ..." />
-          </div>
-          <div className="flex gap-7 ">
-            <NotificationBell />
-            <UserInfo user={user} onClick={() => navigate("/profile")} />
-          </div>
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+            My <span className="text-gradient">Courses</span>
+          </h1>
+          <p className="text-slate-500 font-medium mt-1">Manage and organize your enrolled learning paths.</p>
         </div>
-      </div>
-      <div className="mt-10 ml-5 flex gap-10">
+        
+        <div className="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+          <NotificationBell />
+          <UserInfo user={user} onClick={() => navigate("/profile")} />
+        </div>
+      </header>
+
+      {/* Grid Content */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
         {courses.map((course) => (
           <Card key={course._id} course={course} />
         ))}
         <AddCourseCard onAdd={() => setShowAddCourse(true)} />
-        {showAddcourse && (
-          <AddCourse
-            onClose={() => setShowAddCourse(false)}
-            onSubmit={handleAddCourseSubmit}
-          />
-        )}
       </div>
-      <div></div>
+
+      {showAddcourse && (
+        <AddCourse
+          onClose={() => setShowAddCourse(false)}
+          onSubmit={handleAddCourseSubmit}
+        />
+      )}
     </div>
   );
 };
