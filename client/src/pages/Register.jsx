@@ -34,7 +34,7 @@ export default function Register() {
       if (!res.ok) {
         setError(data.message || "Registration failed");
       } else {
-        login(data);
+        login({ id: data.id, name: data.name, email: data.email, role: data.role });
         navigate("/");
       }
       

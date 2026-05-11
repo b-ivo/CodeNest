@@ -1,24 +1,105 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import Loader from "../components/Loader";
-import { 
-  FaBookReader, 
-  FaSearch, 
-  FaFilter, 
-  FaChartLine, 
-  FaAward,
-  FaUserGraduate,
-  FaChalkboardTeacher,
-  FaUsers,
-  FaClipboardCheck
+import {
+  FaBookReader, FaSearch, FaChartLine, FaAward,
+  FaUserGraduate, FaChalkboardTeacher, FaUsers,
+  FaClipboardCheck, FaDownload, FaStar, FaTimes, FaSave,
 } from "react-icons/fa";
+
+// ── Inline Grading Modal ──────────────────────────────────────────────────────
+function GradeModal({ submission, onClose, onSuccess }) {
+  const [grade, setGrade]       = useState(submission.grade ?? "");
+  const [feedback, setFeedback] = useState(submission.feedback ?? "");
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const g = Number(grade);
+    if (grade === "" || isNaN(g) || g < 0 || g > 100) {
+      setError("Grade must be a number between 0 and 100.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/submissions/${submission._id}/grade`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ grade: g, feedback }),
+        credentials: "include",
+      });
+      if (res.ok) { onSuccess(); onClose(); }
+      else { const d = await res.json(); setError(d.message || "Failed to save grade."); }
+    } catch { setError("Network error. Please try again."); }
+    finally { setLoading(false); }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-gray-900">Grade Submission</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><FaTimes /></button>
+        </div>
+        <div className="mb-4 p-4 bg-gray-50 rounded-xl">
+          <p className="font-semibold text-gray-900">{submission.studentId?.name}</p>
+          <p className="text-xs text-gray-500">{submission.assignmentTitle} · {submission.courseName}</p>
+          <p className="text-sm text-gray-600 mt-2 line-clamp-3">{submission.content}</p>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Grade (0–100) <span className="text-red-500">*</span></label>
+            <input type="number" min="0" max="100" value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
+              required />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Feedback (Optional)</label>
+            <textarea rows={3} value={feedback} onChange={(e) => setFeedback(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all resize-none"
+              placeholder="Provide feedback to the student…" />
+          </div>
+          {error && <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">{error}</div>}
+          <div className="flex gap-3">
+            <button type="button" onClick={onClose}
+              className="flex-1 py-3 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors">
+              Cancel
+            </button>
+            <button type="submit" disabled={loading}
+              className="flex-1 btn-primary flex items-center justify-center gap-2">
+              <FaSave /> {loading ? "Saving…" : "Save Grade"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// ── CSV Helpers ──────────────────────────────────────────────────────────────
+function toCSV(rows) {
+  if (!rows.length) return "";
+  const keys = Object.keys(rows[0]);
+  const escape = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  return [keys.join(","), ...rows.map((r) => keys.map((k) => escape(r[k])).join(","))].join("\n");
+}
+function downloadFile(content, filename) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([content], { type: "text/csv" }));
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
 
 export default function GradeBook() {
   const { user, loading } = useAuth();
-  const [grades, setGrades] = useState([]);
-  const [courses, setCourses] = useState([]);
+  const [grades, setGrades]             = useState([]);
+  const [courses, setCourses]           = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery]   = useState("");
+  const [gradingRow, setGradingRow]     = useState(null); // submission being graded
 
   const fetchGrades = async () => {
     try {
@@ -132,12 +213,34 @@ export default function GradeBook() {
               {user?.role === 'teacher' ? 'Grade Management' : 'My Gradebook'}
             </h1>
             <p className="text-gray-600 text-lg">
-              {user?.role === 'teacher' 
+              {user?.role === 'teacher'
                 ? 'Review and grade student submissions'
-                : 'Track your academic progress and grades'
-              }
+                : 'Track your academic progress and grades'}
             </p>
           </div>
+          {/* CSV Export */}
+          <button
+            onClick={() => {
+              if (user?.role === 'teacher') {
+                const rows = filteredGrades.map(g => ({
+                  Student: g.studentId?.name, Assignment: g.assignmentTitle,
+                  Course: g.courseName, Submitted: new Date(g.submittedAt).toLocaleDateString(),
+                  Grade: g.grade ?? 'Not graded', Status: g.status, Feedback: g.feedback ?? '',
+                }));
+                downloadFile(toCSV(rows), 'gradebook.csv');
+              } else {
+                const rows = filteredGrades.map(g => ({
+                  Assignment: g.title, Course: g.courseId?.courseName,
+                  Submitted: new Date(g.submission?.submittedAt).toLocaleDateString(),
+                  Grade: g.submission?.grade, Feedback: g.submission?.feedback ?? '',
+                }));
+                downloadFile(toCSV(rows), 'my-grades.csv');
+              }
+            }}
+            className="btn-secondary flex items-center gap-2"
+          >
+            <FaDownload /> Export CSV
+          </button>
         </div>
 
         {/* Stats Cards */}
@@ -279,12 +382,17 @@ export default function GradeBook() {
                           {new Date(grade.submittedAt).toLocaleDateString()}
                         </td>
                         <td className="py-4 px-6">
-                          {grade.grade ? (
+                          {grade.grade != null ? (
                             <span className={`px-3 py-1 rounded-full text-sm font-bold ${getGradeColor(grade)}`}>
                               {grade.grade}%
                             </span>
                           ) : (
-                            <span className="text-gray-400">Not graded</span>
+                            <button
+                              onClick={() => setGradingRow(grade)}
+                              className="px-3 py-1 rounded-full text-xs font-bold bg-secondary/10 text-secondary hover:bg-secondary hover:text-white transition-colors flex items-center gap-1"
+                            >
+                              <FaStar /> Grade
+                            </button>
                           )}
                         </td>
                         <td className="py-4 px-6">
@@ -338,6 +446,16 @@ export default function GradeBook() {
           </div>
         )}
       </div>
+      {gradingRow && (
+        <GradeModal
+          submission={gradingRow}
+          onClose={() => setGradingRow(null)}
+          onSuccess={() => {
+            setGradingRow(null);
+            fetchGrades();
+          }}
+        />
+      )}
     </div>
   );
 }

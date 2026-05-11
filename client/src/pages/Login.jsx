@@ -32,7 +32,7 @@ export default function Login() {
       if (!res.ok) {
         setError(data.message || "Login failed");
       } else {
-        login(data);
+        login({ id: data.id, name: data.name, email: data.email, role: data.role });
         navigate("/");
       }
     } catch (err) {

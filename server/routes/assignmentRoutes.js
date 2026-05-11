@@ -27,6 +27,7 @@ router.post("/assignments", authenticate, authorizeRoles("teacher"), async (req,
       dueDate: new Date(dueDate),
       maxPoints: maxPoints || 100,
       instructions: instructions || '',
+      status: 'published',
     });
 
     await assignment.save();

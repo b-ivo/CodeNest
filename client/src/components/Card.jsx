@@ -1,11 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { FaBook, FaUsers, FaClock, FaArrowRight } from "react-icons/fa";
 
 const Card = ({ course }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleClick = () => {
-    navigate(`/teacher/courses/${course._id}`);
+    if (user?.role === "teacher") {
+      navigate(`/teacher/courses/${course._id}`);
+    } else {
+      navigate(`/courses/${course._id}`);
+    }
   };
 
   // Generate a color scheme based on course name

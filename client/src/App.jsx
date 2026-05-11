@@ -36,10 +36,8 @@ export default function App() {
           <Route path="/courses" element={<MyCourses />} />
           <Route path="/assignments" element={<Assignments />} />
           <Route path="/submit" element={<ESubmit />} />
-          <Route
-            path="/teacher/courses/:courseId"
-            element={<CourseDetails />}
-          />
+          <Route path="/teacher/courses/:courseId" element={<CourseDetails />} />
+          <Route path="/courses/:courseId" element={<CourseDetails />} />
         <Route path="*" element={<NotFoundPage />} />
         </Route>
 

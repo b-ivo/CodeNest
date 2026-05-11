@@ -8,7 +8,9 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await fetch("/api/dashboard");
+      const res = await fetch("/api/dashboard", {
+        credentials: "include",
+      });
       const data = await res.json();
       if (res.ok) {
         setUser(data.user);

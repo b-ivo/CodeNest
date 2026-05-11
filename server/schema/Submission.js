@@ -37,5 +37,5 @@ const submissionSchema = new mongoose.Schema(
 // Ensure one submission per student per assignment
 submissionSchema.index({ assignmentId: 1, studentId: 1 }, { unique: true });
 
-const Submission = mongoose.model("Submission", submissionSchema);
+const Submission = mongoose.models.Submission || mongoose.model("Submission", submissionSchema);
 export default Submission;
