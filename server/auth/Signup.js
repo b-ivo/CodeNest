@@ -33,7 +33,7 @@ router.post("/register", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: "strict",
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       maxAge: 2 * 24 * 60 * 60 * 1000,
     });
     console.log(token);

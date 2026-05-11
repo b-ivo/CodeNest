@@ -4,15 +4,17 @@ const AddCourseCard = ({ onAdd }) => {
   return (
     <div
       onClick={onAdd}
-      className="bg-white border-2 border-dashed border-blue-400 hover:border-blue-600
-                 h-[170px] w-[170px] rounded-xl flex flex-col items-center justify-center
-                 text-blue-500 hover:text-blue-700 cursor-pointer transition-all
-                 duration-300 shadow-sm hover:shadow-md"
+      className="glass-card border-2 border-dashed border-slate-300 hover:border-primary
+                 h-[220px] w-[200px] flex flex-col items-center justify-center
+                 text-slate-400 hover:text-primary cursor-pointer transition-all
+                 duration-300 hover:bg-slate-50/50 group"
       role="button"
       aria-label="Add new course"
     >
-      <FaPlus size={28} />
-      <p className="mt-2 text-sm font-semibold">Add New Course</p>
+      <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+        <FaPlus size={24} />
+      </div>
+      <p className="text-sm font-bold tracking-wide">New Course</p>
     </div>
   );
 };

@@ -1,33 +1,17 @@
-import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Loader from './../components/Loader';
+import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = ({ children }) => {
-  const [loading, setLoading] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/dashboard", {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Unauthorized");
+  if (loading) return (
+    <div className="flex h-screen w-screen justify-center items-center bg-gray-50">
+      <Loader />
+    </div>
+  );
 
-        setAuthenticated(true);
-      } catch {
-        setAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  if (loading) return <div className="flex justify-center items-center"> <Loader /> </div>;
-
-  if (!authenticated) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/login" replace />;
 
   return children;
 };

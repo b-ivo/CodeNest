@@ -9,11 +9,13 @@ import GradeBook from "./pages/GradeBook";
 import MyCourses from "./pages/MyCourse";
 import CourseDetails from "./pages/CourseDetails";
 import MainLayout from "./layouts/MainLayout";
+import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
+    <AuthProvider>
+      <Router>
+        <Routes>
         {/* Public pages */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
@@ -39,5 +41,6 @@ export default function App() {
 
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }

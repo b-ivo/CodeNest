@@ -11,11 +11,11 @@ import addcourse from "./routes/courseroute.js"
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: true, // Allow all origins in production or configure specifically
     credentials: true,
   })
 );
@@ -30,6 +30,10 @@ app.use("/api/auth", Logout);
 
 connectDB();
 
-app.listen(PORT, () => {
-  console.log(`I am running on ${PORT}`);
-});
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`I am running on ${PORT}`);
+  });
+}
+
+export default app;

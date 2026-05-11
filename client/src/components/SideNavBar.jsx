@@ -1,4 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   FaHome,
   FaBook,
@@ -11,6 +12,8 @@ import {
 
 const SideNavBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { logout } = useAuth();
 
   const mainLinks = [
     { to: "/", label: "Dashboard", icon: <FaHome /> },
@@ -22,62 +25,74 @@ const SideNavBar = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/logout", {
+      const res = await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
-      if (res.ok) navigate("/login");
-      else console.error("Logout failed");
+      if (res.ok) {
+        logout();
+        navigate("/login");
+      }
     } catch (err) {
       console.error("Logout error:", err);
     }
   };
 
   return (
-    <div
-      className="fixed top-0 left-0 h-screen w-[220px] bg-gradient-to-b from-[#161550] to-blue-600
-                    flex flex-col justify-between py-8 text-white overflow-hidden shadow-lg " 
-    >
-      <div className="flex items-center justify-center font-extrabold text-2xl">
-        CodeNest
+    <div className="fixed top-0 left-0 h-screen w-[260px] bg-primary flex flex-col justify-between py-8 text-white overflow-hidden shadow-2xl border-r border-white/10">
+      <div className="px-8 mb-10">
+        <div className="flex items-center gap-3 font-extrabold text-3xl tracking-tight">
+          <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center text-primary shadow-lg shadow-accent/20">
+            C
+          </div>
+          CodeNest
+        </div>
       </div>
 
-      <div className="flex-1 flex flex-col gap-3 px-6 mt-6 overflow-y-auto font-semibold text-lg">
-        {mainLinks.map(({ to, label, icon }) => (
-          <Link
-            key={label}
-            to={to}
-            className="flex items-center gap-3 w-full py-2 px-3 relative
-                       after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px]
-                       after:bg-white after:transition-all after:duration-500 hover:after:w-full"
-          >
-            {icon}
-            <span>{label}</span>
-          </Link>
-        ))}
-      </div>
+      <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
+        {mainLinks.map(({ to, label, icon }) => {
+          const isActive = location.pathname === to;
+          return (
+            <Link
+              key={label}
+              to={to}
+              className={`flex items-center gap-4 w-full py-3 px-4 rounded-xl transition-all duration-300 group ${
+                isActive 
+                  ? "bg-white/10 text-white shadow-inner" 
+                  : "text-white/60 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              <span className={`text-xl transition-transform duration-300 group-hover:scale-110 ${isActive ? "text-accent" : ""}`}>
+                {icon}
+              </span>
+              <span className="font-medium tracking-wide">{label}</span>
+              {isActive && (
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
+              )}
+            </Link>
+          );
+        })}
+      </nav>
 
-      <div className="border-t border-gray-500 mx-6 my-4"></div>
-
-      <div className="flex flex-col gap-3 px-6 mb-2 font-semibold text-lg">
+      <div className="px-4 mt-auto pt-6 space-y-2 border-t border-white/5">
         <Link
           to="/profile"
-          className="flex items-center gap-3 w-full py-2 px-3 relative
-                     after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px]
-                     after:bg-white after:transition-all after:duration-500 hover:after:w-full"
+          className={`flex items-center gap-4 w-full py-3 px-4 rounded-xl transition-all duration-300 group ${
+            location.pathname === "/profile"
+              ? "bg-white/10 text-white"
+              : "text-white/60 hover:text-white hover:bg-white/5"
+          }`}
         >
-          <FaUser />
-          <span>Profile</span>
+          <span className="text-xl group-hover:scale-110 transition-transform"><FaUser /></span>
+          <span className="font-medium tracking-wide">Profile</span>
         </Link>
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 w-full py-2 px-3 relative
-                     after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px]
-                     after:bg-red-500 after:transition-all after:duration-500 hover:after:w-full cursor-pointer"
+          className="flex items-center gap-4 w-full py-3 px-4 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-300 group cursor-pointer"
         >
-          <FaSignOutAlt />
-          <span>Logout</span>
+          <span className="text-xl group-hover:scale-110 transition-transform"><FaSignOutAlt /></span>
+          <span className="font-medium tracking-wide">Logout</span>
         </button>
       </div>
     </div>

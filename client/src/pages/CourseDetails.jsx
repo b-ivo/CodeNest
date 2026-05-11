@@ -13,7 +13,7 @@ export default function CourseDetails() {
     const fetchCourse = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/course/${courseId}`,
+          `/api/course/${courseId}`,
           {
             credentials: "include",
           },

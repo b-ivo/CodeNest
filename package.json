@@ -1,0 +1,14 @@
+{
+  "name": "codenest-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "build:client": "cd client && npm install && npm run build",
+    "build:server": "cd server && npm install",
+    "vercel-build": "npm run build:client"
+  }
+}

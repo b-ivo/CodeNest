@@ -18,44 +18,65 @@ const AddCourse = ({ onClose, onSubmit }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg w-[600px] flex flex-col">
-        <h1 className="text-xl font-bold mb-4">Add a new course</h1>
-
-        <label>Course Name</label>
-        <Input
-          placeholder="Select a name for course"
-          value={courseName}
-          onChange={(e) => setCourseName(e.target.value)}
-        />
-
-        <label>Select Category</label>
-        <Input
-          placeholder="Select category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
-
-        <label>Add level</label>
-        <Input
-          placeholder="Please put the level 3,4,5"
-          value={classLevel}
-          onChange={(e) => setClassLevel(e.target.value)}
-        />
-
-        <label>Number of Periods</label>
-        <Input
-          placeholder="Add number of periods"
-          value={periods}
-          onChange={(e) => setPeriods(e.target.value)}
-        />
-
-        <div className="flex justify-end gap-4 mt-4">
-          <Button onClick={onClose} className="bg-gray-300">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit}>Upload</Button>
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+      <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+        <div className="premium-gradient p-8 text-white">
+          <h1 className="text-2xl font-bold">Add New Course</h1>
+          <p className="text-white/70 text-sm mt-1">Fill in the details to create a new learning path.</p>
         </div>
+
+        <form onSubmit={handleSubmit} className="p-8 space-y-5">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Course Name</label>
+            <Input
+              placeholder="e.g. Advanced Mathematics"
+              value={courseName}
+              onChange={(e) => setCourseName(e.target.value)}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Category</label>
+              <Input
+                placeholder="e.g. Science"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Level</label>
+              <Input
+                placeholder="e.g. 10"
+                value={classLevel}
+                onChange={(e) => setClassLevel(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Number of Periods</label>
+            <Input
+              placeholder="e.g. 45"
+              type="number"
+              value={periods}
+              onChange={(e) => setPeriods(e.target.value)}
+            />
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4">
+            <button 
+              type="button"
+              onClick={onClose} 
+              className="px-6 py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-100 transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
+            <Button type="submit" className="px-8 rounded-xl font-bold">
+              Create Course
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
