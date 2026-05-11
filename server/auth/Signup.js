@@ -8,10 +8,15 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {
-    const { email, name, password } = req.body;
+    const { email, name, password, role } = req.body;
 
     if (!email || !name || !password) {
       return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Validate role
+    if (role && !['student', 'teacher'].includes(role)) {
+      return res.status(400).json({ message: "Invalid role specified" });
     }
 
     const existingUser = await User.findOne({ email });
@@ -25,10 +30,11 @@ router.post("/register", async (req, res) => {
       email,
       name,
       password: hashedPassword,
+      role: role || 'student', // Default to student if no role specified
     });
     await user.save();
 
-    const token = generateToken(user)
+    const token = generateToken(user);
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -36,13 +42,14 @@ router.post("/register", async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       maxAge: 2 * 24 * 60 * 60 * 1000,
     });
-    console.log(token);
     
     return res.status(201).json({
       message: "User created successfully",
       token,
       name: user.name,
       email: user.email,
+      role: user.role,
+      id: user._id
     });
   } catch (err) {
     console.error(err);

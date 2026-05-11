@@ -8,6 +8,8 @@ import Profile from "./pages/Profile";
 import GradeBook from "./pages/GradeBook";
 import MyCourses from "./pages/MyCourse";
 import CourseDetails from "./pages/CourseDetails";
+import Assignments from "./pages/Assignments";
+import ESubmit from "./pages/ESubmit";
 import MainLayout from "./layouts/MainLayout";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -32,6 +34,8 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/gradebook" element={<GradeBook />} />
           <Route path="/courses" element={<MyCourses />} />
+          <Route path="/assignments" element={<Assignments />} />
+          <Route path="/submit" element={<ESubmit />} />
           <Route
             path="/teacher/courses/:courseId"
             element={<CourseDetails />}

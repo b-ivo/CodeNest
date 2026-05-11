@@ -7,7 +7,8 @@ import cors from "cors";
 import dashboardRoute from "./auth/dashboardRoute.js";
 import cookieParser from "cookie-parser";
 import Logout from "./auth/Logout.js";
-import addcourse from "./routes/courseroute.js"
+import courseRoutes from "./routes/courseroute.js";
+import assignmentRoutes from "./routes/assignmentRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -22,26 +23,36 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
-app.use("/api/auth", signupRoute);
-app.use("/api/auth", loginRoute);
-app.use("/api", dashboardRoute);
-app.use("/api", addcourse)
-app.use("/api/auth", Logout);
 
-// Middleware to ensure DB connection
+// Ensure DB is connected before handling any requests
 app.use(async (req, res, next) => {
   try {
     await connectDB();
     next();
   } catch (err) {
-    console.error("DB connection error in middleware:", err.message);
     res.status(500).json({ message: "Database connection failed" });
   }
 });
 
+// Routes
+app.use("/api/auth", signupRoute);
+app.use("/api/auth", loginRoute);
+app.use("/api/auth", Logout);
+app.use("/api", dashboardRoute);
+app.use("/api", courseRoutes);
+app.use("/api", assignmentRoutes);
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({ status: "OK", message: "CodeNest API is running" });
+});
+
+// Initial connection attempt for logging
+connectDB();
+
 if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () => {
-    console.log(`I am running on ${PORT}`);
+    console.log(`CodeNest Server running on port ${PORT}`);
   });
 }
 

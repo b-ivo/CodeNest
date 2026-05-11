@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FaBook } from "react-icons/fa";
+import { FaBook, FaUsers, FaClock, FaArrowRight } from "react-icons/fa";
 
 const Card = ({ course }) => {
   const navigate = useNavigate();
@@ -8,42 +8,78 @@ const Card = ({ course }) => {
     navigate(`/teacher/courses/${course._id}`);
   };
 
+  // Generate a color scheme based on course name
+  const getColorScheme = (courseName) => {
+    const colors = [
+      { bg: "bg-blue-500", light: "bg-blue-50", text: "text-blue-600" },
+      { bg: "bg-purple-500", light: "bg-purple-50", text: "text-purple-600" },
+      { bg: "bg-green-500", light: "bg-green-50", text: "text-green-600" },
+      { bg: "bg-orange-500", light: "bg-orange-50", text: "text-orange-600" },
+      { bg: "bg-pink-500", light: "bg-pink-50", text: "text-pink-600" },
+      { bg: "bg-indigo-500", light: "bg-indigo-50", text: "text-indigo-600" },
+    ];
+    const index = courseName.length % colors.length;
+    return colors[index];
+  };
+
+  const colorScheme = getColorScheme(course.courseName);
+
   return (
     <div
       onClick={handleClick}
-      className="glass-card h-[220px] w-[200px] p-6 cursor-pointer transition-all duration-300 
-                 hover:-translate-y-2 hover:shadow-2xl border border-white/20 group relative overflow-hidden"
+      className="bg-white rounded-2xl p-6 cursor-pointer transition-all duration-300 card-shadow
+                 hover:shadow-xl border border-gray-100 group relative overflow-hidden h-64"
       role="button"
       aria-label={`Open course ${course.courseName}`}
     >
-      {/* Decorative Gradient Background */}
-      <div className="absolute -top-10 -right-10 w-24 h-24 bg-secondary/20 rounded-full blur-2xl group-hover:bg-secondary/40 transition-colors" />
+      {/* Background Pattern */}
+      <div className="absolute top-0 right-0 w-32 h-32 opacity-5 transform rotate-12 translate-x-8 -translate-y-8">
+        <FaBook className="w-full h-full" />
+      </div>
       
-      <div className="flex flex-col h-full items-start">
-        <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-primary mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300">
-          {course.icon || <FaBook size={24} />}
+      <div className="flex flex-col h-full relative z-10">
+        {/* Course Icon */}
+        <div className={`w-14 h-14 rounded-2xl ${colorScheme.light} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+          <FaBook className={`text-xl ${colorScheme.text}`} />
         </div>
 
-        <h3 className="text-xl font-bold text-slate-800 leading-tight mb-1 group-hover:text-primary transition-colors">
-          {course.courseName}
-        </h3>
-        <p className="text-sm font-medium text-slate-500 mb-auto">
-          {course.category}
-        </p>
+        {/* Course Info */}
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-gray-900 leading-tight mb-2 group-hover:text-secondary transition-colors">
+            {course.courseName}
+          </h3>
+          <p className="text-sm font-medium text-gray-500 mb-4">
+            {course.category}
+          </p>
 
-        <div className="mt-4 flex items-center justify-between w-full">
-          <span className="px-2 py-1 rounded-md bg-slate-100 text-[10px] font-bold text-slate-600 uppercase tracking-wider">
-            Level {course.classLevel}
-          </span>
-          <span className="text-xs text-slate-400 font-medium">
-            {course.periods} Periods
-          </span>
+          {/* Course Stats */}
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <FaUsers className="text-gray-400" />
+              <span>Level {course.classLevel}</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <FaClock className="text-gray-400" />
+              <span>{course.periods} Periods</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <div className="flex items-center justify-between mt-auto">
+          <div className={`px-3 py-1 rounded-full ${colorScheme.light} text-xs font-bold ${colorScheme.text} uppercase tracking-wider`}>
+            Active
+          </div>
+          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-all duration-300">
+            <FaArrowRight className="text-sm" />
+          </div>
         </div>
       </div>
 
-      {/* Progress bar simulation for aesthetic */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-slate-100">
-        <div className="h-full bg-accent w-2/3 group-hover:w-full transition-all duration-500" />
+      {/* Progress Indicator */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-100">
+        <div className={`h-full ${colorScheme.bg} transition-all duration-500 group-hover:w-full`} 
+             style={{ width: '65%' }} />
       </div>
     </div>
   );

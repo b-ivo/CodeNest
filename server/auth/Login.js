@@ -25,7 +25,7 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
- const token = generateToken(user)
+    const token = generateToken(user);
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -39,6 +39,8 @@ router.post("/login", async (req, res) => {
       token,
       name: user.name,
       email: user.email,
+      role: user.role,
+      id: user._id
     });
   } catch (err) {
     console.error(err);
